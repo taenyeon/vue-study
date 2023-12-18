@@ -12,6 +12,12 @@
         <router-link to="/test">
           <button>test</button>
         </router-link>
+        <router-link to="/login">
+          <button>login</button>
+        </router-link>
+        <router-link to="/join">
+          <button>join</button>
+        </router-link>
       </div>
       <div class="rv_area">
         <router-view></router-view>

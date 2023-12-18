@@ -1,11 +1,13 @@
-export const axiosInstance = this.$http.create({
-    baseURL: process.env.BASE_API_URL,
+import jwtStorage from "@/storage/jwtStorage";
+import axios from "axios";
+export const axiosInstance = axios.create({
+    baseURL: process.env.VUE_APP_BASE_API_URL,
     timeout: 5000,
 });
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        let accessToken = this.$store.state.accessToken;
+        let accessToken = jwtStorage.getAccessToken()
         config.headers['Content-Type'] = 'application/json';
         config.headers['access_token'] = accessToken;
         return config;
@@ -19,22 +21,25 @@ axiosInstance.interceptors.response.use(
         let resultMessage = data.resultMessage;
         if (resultCode !== "SUCCESS") {
             // 실패 케이스
-            alert(`resultCode : ${resultCode}
+            alert(`resultCode : ${resultCode}\n
              resultMessage : ${resultMessage}`)
-        } else {
-            return response;
         }
+            return response;
     },
     (error) => {
-        if (error.status === 401) {
-            let refreshToken = this.$store.state.refreshToken;
-            if (refreshToken != null) {
-                axiosInstance.get('/accessToken').then(r =>
-                    this.$store.dispatch('SET_ACCESS_TOKEN', r.data.accessToken)
-                );
-
+        let originalConfig = error.config;
+        if (!originalConfig.retried) {
+            originalConfig.retried = true
+            if (error.status === 401) {
+                let refreshToken = jwtStorage.getRefreshToken()
+                if (refreshToken != null) {
+                    axiosInstance.get('/accessToken').then(response =>
+                        jwtStorage.updateAccessToken(response.data.body.accessToken)
+                    );
+                    return axiosInstance(originalConfig)
+                }
             }
         }
-        return Promise.reject(error);
+        alert('server Error!!')
     }
 );
