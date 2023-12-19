@@ -1,7 +1,7 @@
 <script>
 
-import {axiosInstance} from "@/api";
 import jwtStorage from "@/storage/jwtStorage";
+import JwtService from "@/api/jwtService";
 
 export default {
   name: "LoginForm",
@@ -14,12 +14,12 @@ export default {
   mounted() {
     let refreshToken = jwtStorage.getRefreshToken();
     if (refreshToken !== null) {
-      alert(this.$store.state.user.name)
       this.$router.push('/')
     }
   },
   methods: {
     submitForm() {
+      let axiosInstance = JwtService.axiosInstance;
       axiosInstance.post(
           '/user/login',
           {
@@ -30,22 +30,11 @@ export default {
         if (response.data.resultCode !== 'SUCCESS') {
           alert('login fail!!')
         } else {
-          alert('accessToken : ' + response.data.body.accessToken)
           jwtStorage.setTokens(response.data.body)
-
-          // 유저 정보 불러오기.
-          axiosInstance.get('/user')
-              .then((response) => {
-                if (response.data.resultCode !== 'SUCCESS') {
-                  alert('your not loggedIn')
-                } else {
-                  this.$store.dispatch('user/setUser', response.data.body)
-                }
-              })
-
-          this.$router.push("/")
+          this.$router.go()
         }
-      })
+      }).catch((error) => {
+        console.log(error.status)})
     },
   },
 }
@@ -53,17 +42,59 @@ export default {
 
 <template>
   <div class="container">
-    <form @submit.prevent="submitForm">
-      <div>
-        <label for="username">email</label>
-        <input type="text" id="username" v-model="username"/>
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Try Login</h1>
+                  </div>
+                  <form class="user" @submit.prevent="submitForm">
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user"
+                             id="exampleInputEmail" aria-describedby="emailHelp"
+                             placeholder="Enter Email Address..." v-model="username">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control form-control-user"
+                             id="exampleInputPassword" placeholder="Password" v-model="password">
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox small">
+                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                        <label class="custom-control-label" for="customCheck">Remember
+                          Me</label>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                      Login
+                    </button>
+                    <hr>
+                    <router-link to="/join" class="btn btn-facebook btn-user btn-block">
+                      <font-awesome-icon :icon="['fas', 'right-to-bracket']" /> Join
+                    </router-link>
+                    <a href="#" class="btn btn-facebook btn-user btn-block">
+                      <font-awesome-icon :icon="['fas', 'arrow-right-arrow-left']" /> Reset Password
+                    </a>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div>
-        <label for="password">비밀번호</label>
-        <input type="password" id="password" v-model="password"/>
-      </div>
-      <button type="submit">로그인</button>
-    </form>
+
+    </div>
+
   </div>
 </template>
 

@@ -14,7 +14,7 @@ class JwtStorage {
 
     dropTokens() {
         localStorage.removeItem("refresh_token")
-        localStorage.removeItem("accessToken")
+        localStorage.removeItem("access_token")
     }
 
     updateRefreshToken(refreshToken) {

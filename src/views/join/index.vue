@@ -15,7 +15,7 @@ export default {
   methods: {
     submitForm() {
       axiosInstance.post(
-          '/user',
+          '/user/join',
           {
             username: this.username,
             password: this.password,
@@ -32,25 +32,64 @@ export default {
 
 <template>
   <div class="container">
-    <form @submit.prevent="submitForm">
-      <div>
-        <label for="username">username</label>
-        <input type="text" id="username" v-model="username"/>
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Try Join</h1>
+                  </div>
+                  <form class="user" @submit.prevent="submitForm">
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user"
+                             id="exampleInputEmail" aria-describedby="emailHelp"
+                             placeholder="Enter Email Address..." v-model="username">
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user"
+                             id="exampleInputPassword" placeholder="Password" v-model="password">
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user"
+                             id="exampleInputName" placeholder="name" v-model="name">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control form-control-user"
+                             id="exampleInputPhoneNumber" placeholder="phoneNumber" v-model="phoneNumber">
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox small">
+                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                        <label class="custom-control-label" for="customCheck">Remember
+                          Me</label>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                      Join
+                    </button>
+                    <hr>
+                    <router-link to="/login" class="btn btn-facebook btn-user btn-block">
+                      <font-awesome-icon :icon="['fas', 'right-to-bracket']" /> Back to Login
+                    </router-link>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div>
-        <label for="name">name</label>
-        <input type="text" id="name" v-model="name"/>
-      </div>
-      <div>
-        <label for="password">password</label>
-        <input type="password" id="password" v-model="password"/>
-      </div>
-      <div>
-        <label for="phoneNumber">phoneNumber</label>
-        <input type="text" id="phoneNumber" v-model="phoneNumber"/>
-      </div>
-      <button type="submit">회원가입</button>
-    </form>
+
+    </div>
+
   </div>
 </template>
 

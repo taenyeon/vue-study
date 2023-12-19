@@ -1,6 +1,4 @@
 <script>
-import jwtStorage from "@/storage/jwtStorage";
-
 export default {
   name: 'homeView',
   data() {
@@ -8,14 +6,12 @@ export default {
       user: null
     }
   },
-  methods: {
-    logout() {
-      if (this.$store.state.user != null) {
-        jwtStorage.dropTokens()
-        this.$store.dispatch("user/dropUser")
-        this.$router.go(this.$router.currentRoute)
-      }
+  computed: {
+    userInfo() {
+      return this.$store.state.userStore.user
     }
+  },
+  methods: {
   }
 
 }
@@ -38,8 +34,7 @@ export default {
 
             <!-- Page Heading -->
             <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
-            <p>{{ this.$store.state.user }}</p>
-            <button @click="logout()"> 로그아웃</button>
+            {{ userInfo }}
 
           </div>
           <!-- /.container-fluid -->
