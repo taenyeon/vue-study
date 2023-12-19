@@ -1,10 +1,10 @@
 <template>
   <div id="wrapper">
-    <LoadingComponent/>
     <SideBar/>
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
-      <NavBar/>
+        <NavBar/>
+        <LoadingComponent/>
         <router-view></router-view>
       </div>
     </div>

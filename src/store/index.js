@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import userStore from './modules/userStore'
-import loadingStore from "@/store/modules/loadingStore";
+import loadingStore from "./modules/loadingStore";
 
 Vue.use(Vuex);
 
@@ -12,6 +12,6 @@ export default new Vuex.Store({
     modules: {
         namespace: true,
         userStore,
-        loadingStore
+        loadingStore,
     },
 });

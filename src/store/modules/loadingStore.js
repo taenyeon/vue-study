@@ -1,15 +1,15 @@
 export default {
     namespaced: true,
     state: {
-        isLoading: false
+        is_loading: false
     },
     getters: {},
     mutations: {
         ON_LOADING(state) {
-            state.isLoading = true
+            state.is_loading = true
         },
         OFF_LOADING(state) {
-            state.isLoading = false
+            state.is_loading = false
         }
     },
     actions: {
