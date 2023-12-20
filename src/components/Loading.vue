@@ -8,11 +8,11 @@
 <script>
 export default {
   name: "loadingComponent",
-  data() {
-    return {
-      isLoading: this.$store.state.loadingStore.is_loading
+  computed: {
+    isLoading() {
+      return this.$store.state.loadingStore.is_loading
     }
-  }
+  },
 };
 </script>
 

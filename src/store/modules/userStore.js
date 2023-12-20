@@ -2,6 +2,7 @@ export default {
     namespaced: true,
     state: {
         user: null,
+        is_loading:false,
     },
     getters: {},
     mutations: {

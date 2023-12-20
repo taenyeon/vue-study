@@ -1,6 +1,7 @@
 import router from '@/router';
 import jwtStorage from "@/storage/jwtStorage";
 import {axiosInstance} from "@/api/index";
+import store from '@/store/index'
 
 class JwtService {
 
@@ -16,7 +17,7 @@ class JwtService {
          * request interceptor
          */
         this.axiosInstance.interceptors.request.use((config) => {
-                this.$store.state.loadingStore.is_loading = true
+                store.dispatch("loadingStore/onLoading").then()
                 let accessToken = jwtStorage.getAccessToken();
                 //토큰이 localstorage 에 있을 때만 header 에 토큰을 심어둔다.
                 if (accessToken) {
@@ -34,9 +35,11 @@ class JwtService {
          * response interceptor
          */
         this.axiosInstance.interceptors.response.use((response) => {
+                store.dispatch("loadingStore/offLoading").then()
                 return response;
             },
             async (error) => {
+                store.dispatch("loadingStore/offLoading").then()
                 const {status, config} = error.response;
                 const responseConfig = config;
                 if (status === 401) {
@@ -126,7 +129,7 @@ class JwtService {
      * 로그아웃 시키기
      */
     shouldUnAuthorized() {
-        this.$store.dispatch("userStore/dropUser")
+        store.dispatch("userStore/dropUser")
             .then(() => router.push('/login'))
     }
 }
