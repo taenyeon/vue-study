@@ -1,9 +1,9 @@
 import router from '@/router';
-import jwtStorage from "@/storage/jwtStorage";
+import jwtStorage from "@/storage/JwtStorage";
 import {axiosInstance} from "@/api/index";
 import store from '@/store/index'
 
-class JwtService {
+class BaseApi {
 
     axiosInstance
     //대기요청 상태인지 체크 toggle 변수
@@ -134,4 +134,4 @@ class JwtService {
     }
 }
 
-export default new JwtService(axiosInstance)
+export default new BaseApi(axiosInstance)

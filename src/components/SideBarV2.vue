@@ -1,14 +1,26 @@
 <script>
+import UserApi from "@/api/user/UserApi";
+
 export default {
-  name: "SideBarV2"
+  name: "SideBarV2",
+  computed: {
+    userInfo() {
+      return this.$store.state.userStore.user
+    }
+  },
+  methods: {
+    logout() {
+      UserApi.logout()
+    },
+  }
 }
 </script>
 
 <template>
-  <div class="d-flex flex-column flex-shrink-0 bg-gradient bg-dark text-center" style="width: 4.5rem;">
-    <a href="/" class="d-block pt-3 link-light text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
+  <div class="d-flex flex-column flex-shrink-0 bg-gradient bg-dark text-center" style="width: 4.0rem;">
+    <router-link to="/" class="d-block pt-3 link-light text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
       <font-awesome-icon :icon="['far', 'folder']" bounce size="2xl"/>
-    </a>
+    </router-link>
     <hr/>
     <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
       <li class="nav-item">
@@ -29,20 +41,29 @@ export default {
         </router-link>
       </li>
     </ul>
-    <div class="dropdown mb-3">
-      <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">
+    <div class="mb-3">
+    </div>
+    <div class="dropdown dropend  mb-3">
+      <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle " id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
+        <font-awesome-icon :icon="['fas', 'user']" style="color: #ffffff;" />
       </a>
-      <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3" style="">
-        <li><a class="dropdown-item" href="#">New project...</a></li>
-        <li><a class="dropdown-item" href="#">Settings</a></li>
-        <li><a class="dropdown-item" href="#">Profile</a></li>
+      <ul v-if="userInfo != null" class="dropdown-menu text-small shadow bg-dark" aria-labelledby="dropdownUser3" style="">
+        <li><a class="dropdown-item text-light" href="#">New project...</a></li>
+        <li><a class="dropdown-item text-light" href="#">Settings</a></li>
+        <li><a class="dropdown-item text-light" href="#">Profile</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Sign out</a></li>
+        <li><p class="dropdown-item text-light" @click="logout" >Logout</p></li>
+      </ul>
+      <ul v-else class="dropdown-menu text-sm-start shadow bg-dark " aria-labelledby="dropdownUser3" style="">
+        <li><router-link to="/login" class="dropdown-item text-light">Login</router-link></li>
+        <li><router-link to="/join" class="dropdown-item text-light">Join</router-link></li>
       </ul>
     </div>
   </div>
 </template>
 
 <style scoped>
+.dropdown-item:hover {
+  background-color: cornflowerblue;
+}
 </style>

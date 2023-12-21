@@ -1,7 +1,7 @@
 <script>
 
-import jwtStorage from "@/storage/jwtStorage";
-import JwtService from "@/api/jwtService";
+import jwtStorage from "@/storage/JwtStorage";
+import userService from "@/api/user/UserApi";
 
 export default {
   name: "LoginForm",
@@ -19,72 +19,53 @@ export default {
   },
   methods: {
     submitForm() {
-      let axiosInstance = JwtService.axiosInstance;
-      axiosInstance.post(
-          '/user/login',
-          {
-            username: this.username,
-            password: this.password,
-          }
-      ).then((response) => {
-        if (response.data.resultCode !== 'SUCCESS') {
-          alert('login fail!!')
-        } else {
-          jwtStorage.setTokens(response.data.body)
-          this.$router.go()
-        }
-      }).catch((error) => {
-        console.log(error)
-        })
+      userService.login(this.username, this.password)
     },
   },
 }
 </script>
 
 <template>
-  <div class="container">
+  <div class="container m-auto">
 
     <!-- Outer Row -->
-    <div class="row justify-content-center">
+    <div class="row justify-content-center m-auto">
 
       <div class="col-xl-10 col-lg-12 col-md-9">
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card o-hidden border-0 shadow-lg my-5 bg-gradient bg-dark text-light">
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
-            <div class="row">
+            <div class="row justify-content-center">
               <div class="col-lg-6">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Try Login</h1>
+                    <h1 class="h4 mb-4 font-weight-bold">Try Login</h1>
                   </div>
-                  <form class="user" @submit.prevent="submitForm">
-                    <div class="form-group">
-                      <input type="text" class="form-control form-control-user"
-                             id="exampleInputEmail" aria-describedby="emailHelp"
-                             placeholder="Enter Email Address..." v-model="username">
+                  <form @submit.prevent="submitForm">
+                    <div class="form-floating mt-1">
+                      <input type="text" class="form-control bg-dark" id="floatingInput" placeholder="name@example.com"
+                             v-model="username">
+                      <label for="floatingInput">Email address</label>
                     </div>
-                    <div class="form-group">
-                      <input type="password" class="form-control form-control-user"
-                             id="exampleInputPassword" placeholder="Password" v-model="password">
+                    <div class="form-floating mt-1">
+                      <input type="password" class="form-control bg-dark" id="floatingPassword" placeholder="Password"
+                             v-model="password">
+                      <label for="floatingPassword">Password</label>
                     </div>
-                    <div class="form-group">
-                      <div class="custom-control custom-checkbox small">
-                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                        <label class="custom-control-label" for="customCheck">Remember
-                          Me</label>
-                      </div>
+
+                    <div class="form-check text-start my-3">
+                      <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        Remember me
+                      </label>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-user btn-block">
-                      Login
-                    </button>
-                    <hr>
-                    <router-link to="/join" class="btn btn-facebook btn-user btn-block">
-                      <font-awesome-icon :icon="['fas', 'right-to-bracket']" /> Join
-                    </router-link>
-                    <a href="#" class="btn btn-facebook btn-user btn-block">
-                      <font-awesome-icon :icon="['fas', 'arrow-right-arrow-left']" /> Reset Password
-                    </a>
+                    <div class="text-center w-100 py-1">
+                      <button class="btn btn-primary w-100 py-2" type="submit">Login</button>
+                    </div>
+                    <div class="text-center w-100 py-1">
+                      <button class="btn btn-primary w-100 py-2" type="button" @click="$router.push('/join')">Join</button>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -95,7 +76,6 @@ export default {
       </div>
 
     </div>
-
   </div>
 </template>
 

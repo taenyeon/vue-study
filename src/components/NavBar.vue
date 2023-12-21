@@ -1,38 +1,9 @@
 <script>
-import jwtStorage from "@/storage/jwtStorage";
-import JwtService from "@/api/jwtService";
+import jwtStorage from "@/storage/JwtStorage";
+import JwtService from "@/api/BaseApi";
 
 export default {
   name: "navBar",
-  computed: {
-    userInfo() {
-      return this.$store.state.userStore.user
-    }
-  },
-  mounted() {
-    if (jwtStorage.getRefreshToken() != null && jwtStorage.getAccessToken() != null) {
-      this.getUserInfo()
-    }
-  },
-  methods: {
-    logout() {
-      jwtStorage.dropTokens()
-      this.$store.dispatch("userStore/dropUser")
-      this.$router.push('/')
-    },
-    getUserInfo() {
-      let axiosInstance = JwtService.axiosInstance;
-      // 유저 정보 불러오기.
-      axiosInstance.get('/user')
-          .then((response) => {
-            if (response.data.resultCode === 'SUCCESS') {
-              this.$store.dispatch('userStore/setUser', response.data.body)
-            }
-          }).catch(() => {
-        console.log('!!')
-      })
-    }
-  }
 }
 
 </script>

@@ -1,11 +1,9 @@
 <template>
-  <main>
+  <main class="bg-gradient bg-dark min-vh-100 min-vw-100 text-light">
     <SideBarV2/>
-    <div id="content-wrapper" class="">
-      <div id="content">
+    <div id="content" class="d-flex justify-content-center min-vw-100 min-vh-100 bg-dark border border-secondary">
         <LoadingComponent/>
         <router-view></router-view>
-      </div>
     </div>
   </main>
 </template>
@@ -39,6 +37,10 @@ main {
   max-height: 100vh;
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+#content {
+  margin-top: 4rem;
 }
 
 .b-example-divider {

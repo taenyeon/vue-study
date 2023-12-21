@@ -1,16 +1,22 @@
+import UserStorage from "@/storage/UserStorage";
+
 export default {
     namespaced: true,
     state: {
-        user: null,
-        is_loading:false,
+        user: UserStorage.getUserInfo(),
     },
     getters: {},
     mutations: {
         SET_USER(state, user) {
-            state.user = user;
+            UserStorage.setUserInfo(user)
+                .then(state.user = user)
         },
         DROP_USER(state) {
-            state.user = null
+            UserStorage.dropUserInfo()
+                .then(state.user = null)
+        },
+        LOAD_USER(state) {
+            state.user = UserStorage.getUserInfo()
         }
     },
     actions: {
@@ -19,6 +25,9 @@ export default {
         },
         dropUser({commit}) {
             commit('DROP_USER')
+        },
+        loadUser({commit}) {
+            commit('LOAD_USER')
         }
     },
 };
