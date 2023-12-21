@@ -31,11 +31,7 @@ export default {
       </li>
 
       <li class="nav-item">
-        <router-link hover-overlay to="/chat"  class="nav-link link-light       background: linear-gradient(
-        45deg,
-        hsla(168, 85%, 52%, 0.5),
-        hsla(263, 88%, 45%, 0.5) 100%
-      );">
+        <router-link hover-overlay to="/board"  class="nav-link link-light">
           <font-awesome-icon :icon="['far', 'pen-to-square']" />
           <span style="font-size: x-small">BOARD</span>
         </router-link>

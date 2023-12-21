@@ -1,37 +1,28 @@
 <script>
+import BoardComponent from "@/components/Board.vue";
+
 export default {
-  name: 'homeView',
+  name: 'BoardView',
+  components: {BoardComponent},
   data() {
     return {
+      datas: [
+        {
+          id: 1,
+          title: 'testTitle',
+          writer: 'test',
+          createdAt: '2023-12-21 08:00:00'
+        }
+      ]
     }
   },
-  computed: {
-    userInfo() {
-      return this.$store.state.userStore.user
-    }
-  },
-  mounted() {
-    this.$store.dispatch('userStore/loadUser')
-  },
-  methods: {
-  }
-
 }
 </script>
 
 <template>
-
-
-          <!-- Begin Page Content -->
-          <div class="container-fluid">
-
-            <!-- Page Heading -->
-            <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
-            {{ userInfo }}
-
-          </div>
-          <!-- /.container-fluid -->
-
+  <div class="container-fluid">
+    <BoardComponent :datas="this.datas"/>
+  </div>
 </template>
 
 <style>

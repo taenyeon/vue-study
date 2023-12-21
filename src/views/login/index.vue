@@ -44,12 +44,12 @@ export default {
                   </div>
                   <form @submit.prevent="submitForm">
                     <div class="form-floating mt-1">
-                      <input type="text" class="form-control bg-dark" id="floatingInput" placeholder="name@example.com"
+                      <input type="text" class="form-control bg-dark text-light" id="floatingInput" placeholder="name@example.com"
                              v-model="username">
                       <label for="floatingInput">Email address</label>
                     </div>
                     <div class="form-floating mt-1">
-                      <input type="password" class="form-control bg-dark" id="floatingPassword" placeholder="Password"
+                      <input type="password" class="form-control bg-dark text-light" id="floatingPassword" placeholder="Password"
                              v-model="password">
                       <label for="floatingPassword">Password</label>
                     </div>
