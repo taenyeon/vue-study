@@ -3,10 +3,17 @@ import BaseApi from "@/api/BaseApi";
 class BoardApi {
 
     async getBoards(currentPage) {
-        let page = currentPage || 0;
         let api = BaseApi.axiosInstance;
-        api.get("/board", {currentPage: page})
+        let page = currentPage || 0;
+        api.get("/board",
+            {
+                params:
+                    {
+                        currentPage: page
+                    }
+            })
             .then((response) => {
+                alert(response.data.toJSON)
                 return response.data.body;
             })
             .catch()

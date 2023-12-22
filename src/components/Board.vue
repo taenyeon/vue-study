@@ -3,7 +3,6 @@ export default {
   name: "BoardComponent",
   data() {
     return {
-      headers : Object.keys(this.datas[0]) || [],
     }
   },
   props: ['datas'],
@@ -17,9 +16,9 @@ export default {
 
   <table class="table table-dark table-hover">
     <thead class="align-middle">
-    <tr>
-      <th v-for="item in headers" :key="item">{{item}}</th>
-    </tr>
+<!--    <tr>-->
+<!--      <th v-for="item in headers" :key="item">{{item}}</th>-->
+<!--    </tr>-->
     </thead>
     <tbody class="align-middle">
     <tr v-for="item in datas.content" :key="item.id">

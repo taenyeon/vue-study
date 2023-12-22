@@ -22,7 +22,11 @@ export default {
   },
   computed: {},
   mounted() {
-    this.datas = BoardApi.getBoards(0)
+    BoardApi.getBoards(0)
+        .then((result) => {
+          alert(result)
+          this.datas = result
+        })
   }
 }
 </script>
