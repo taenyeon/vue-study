@@ -3,12 +3,10 @@ export default {
   name: "BoardComponent",
   data() {
     return {
-      values: this.datas || [],
-      headers: Object.keys(this.datas[0]) || [],
-      page: this.pageInfo || null
+      headers : Object.keys(this.datas[0]) || [],
     }
   },
-  props: ['datas', 'pageInfo'],
+  props: ['datas'],
   computed: {
   },
 }
@@ -24,10 +22,10 @@ export default {
     </tr>
     </thead>
     <tbody class="align-middle">
-    <tr v-for="item in datas" :key="item.id">
+    <tr v-for="item in datas.content" :key="item.id">
       <td>{{item.id}}</td>
       <td>{{item.title}}</td>
-      <td>{{item.writer}}</td>
+      <td>{{item.member.name}}</td>
       <td>{{item.createdAt}}</td>
     </tr>
     </tbody>

@@ -1,21 +1,29 @@
 <script>
 import BoardComponent from "@/components/Board.vue";
+import BoardApi from "@/api/BoardApi";
 
 export default {
   name: 'BoardView',
   components: {BoardComponent},
   data() {
     return {
-      datas: [
-        {
-          id: 1,
-          title: 'testTitle',
-          writer: 'test',
-          createdAt: '2023-12-21 08:00:00'
+      datas: {
+        content: [],
+        pageable: {
+          totalPage: 0,
+          pageNumber: 0,
+          pageSize: 0,
+          last: true,
+          first: false,
+          size: 0,
         }
-      ]
+      }
     }
   },
+  computed: {},
+  mounted() {
+    this.datas = BoardApi.getBoards(0)
+  }
 }
 </script>
 
