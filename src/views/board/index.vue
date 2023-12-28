@@ -7,7 +7,7 @@ export default {
   components: {BoardComponent},
   data() {
     return {
-      datas: {
+      boardData: {
         content: [],
         pageable: {
           totalPage: 0,
@@ -20,20 +20,24 @@ export default {
       }
     }
   },
-  computed: {},
-  mounted() {
+  computed: {
+  },
+  created() {
     BoardApi.getBoards(0)
-        .then((result) => {
-          alert(result)
-          this.datas = result
-        })
+        .then(result => this.boardData = result)
+  },
+  methods: {
+    getBoardData(page){
+      BoardApi.getBoards(page)
+          .then(result => this.boardData = result)
+    }
   }
 }
 </script>
 
 <template>
   <div class="container-fluid">
-    <BoardComponent :datas="this.datas"/>
+    <BoardComponent :datas="this.boardData" v-on:movePage="getBoardData"/>
   </div>
 </template>
 

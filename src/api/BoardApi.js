@@ -5,7 +5,7 @@ class BoardApi {
     async getBoards(currentPage) {
         let api = BaseApi.axiosInstance;
         let page = currentPage || 0;
-        api.get("/board",
+        return await api.get("/board",
             {
                 params:
                     {
@@ -13,10 +13,11 @@ class BoardApi {
                     }
             })
             .then((response) => {
-                alert(response.data.toJSON)
                 return response.data.body;
             })
-            .catch()
+            .catch(() => {
+                return null
+            })
     }
 
 }

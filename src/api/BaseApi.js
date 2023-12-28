@@ -2,6 +2,7 @@ import router from '@/router';
 import jwtStorage from "@/storage/JwtStorage";
 import {axiosInstance} from "@/api/index";
 import store from '@/store/index'
+import userApi from "@/api/user/UserApi";
 
 class BaseApi {
 
@@ -10,6 +11,7 @@ class BaseApi {
     isTokenRefreshCheck
     //콜백함수 타입의 배열
     refreshSubscribers = []
+
     constructor(axiosInstance) {
 
         this.axiosInstance = axiosInstance;
@@ -43,46 +45,20 @@ class BaseApi {
                 const {status, config} = error.response;
                 const responseConfig = config;
                 if (status === 401) {
-                    //로그인 실패시~
                     if (!this.isTokenRefreshCheck) {
-                        // isTokenRefreshing 이 false 인 경우에만 token refresh 요청
                         this.isTokenRefreshCheck = true;
-                        // refresh token 요청
-                        this.axiosInstance.post('/user/accessToken',
-                            {
-                                refreshToken: jwtStorage.getRefreshToken()
-                            })
-                            .then((res) => {
-                                this.isTokenRefreshCheck = false;
-                                let token = res.data.body;
-                                this.setTokens(token);
-
-                                setTimeout(async () => {
-                                    // 새로운 토큰으로 지연되었던 요청 진행
-                                    await this.getTokenRefreshed(token.accessToken);
-                                    //저장 배열 초기화
-                                    // await this.changeProgressStatus('OFF')
-                                    await this.removeRefreshSubscribers();
-                                }, 700);
-
-                            }).catch((error) => {
-                            const {message, status} = error.data;
-                            // console.log( error, code, message );
-                            // refresh token 정보도 만료 되었을 때 로그인 페이지로 보낸다.
-                            if (status === 401 && message === 'token expired') {
-                                alert('사용자 정보가 만료되었습니다.\\n 다시 로그인 해주세요');
-                                //로그아웃
-                                this.shouldUnAuthorized();
-                            }
-                        });
-
+                        if (jwtStorage.getRefreshToken() != null) {
+                            this.refreshAccessToken();
+                        } else {
+                            router.push('/login')
+                        }
                     }
 
                     //  token 이 재발급 되는 동안의 요청은 refreshSubscribers 에 저장
                     return new Promise((resolve) => {
                         //getTokenRefreshed 에서 전달된 token 을  내부에서 refreshSubscribers( 콜백함수 저장한 배열 ) 를 forEach 로 순환 대입( 전달된 token) 실행시킨다.
                         this.addRefreshSubscriber((token) => {
-                            responseConfig.headers.Authorization = token
+                            responseConfig.headers.access_token = token
                             resolve(this.axiosInstance(responseConfig));
                         });
                     });
@@ -92,6 +68,39 @@ class BaseApi {
             });
     }
 
+
+    refreshAccessToken() {
+        this.axiosInstance.post('/user/accessToken',
+            {
+                refreshToken: jwtStorage.getRefreshToken()
+            })
+            .then((res) => {
+                this.isTokenRefreshCheck = false;
+                if (res.data.resultCode !== 'INVALID_TOKEN_ERROR') {
+                    let token = res.data.body;
+                    this.setTokens(token);
+
+                    setTimeout(async () => {
+                        // 새로운 토큰으로 지연되었던 요청 진행
+                        await this.getTokenRefreshed(token.accessToken);
+                        //저장 배열 초기화
+                        // await this.changeProgressStatus('OFF')
+                        await this.removeRefreshSubscribers();
+                    }, 700);
+                } else {
+                    userApi.logout()
+                }
+            }).catch((error) => {
+            const {status} = error.status;
+            // console.log( error, code, message );
+            // refresh token 정보도 만료 되었을 때 로그인 페이지로 보낸다.
+            if (status === 401) {
+                alert('사용자 정보가 만료되었습니다.\\n 다시 로그인 해주세요');
+                //로그아웃
+                this.shouldUnAuthorized();
+            }
+        });
+    }
 
     /**
      * 새로 발급 받는 token 재지정.

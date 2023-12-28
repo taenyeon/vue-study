@@ -10,7 +10,7 @@ class UserApi {
         api.get('/user')
             .then((response) => {
                 if (response.data.resultCode === 'SUCCESS') {
-                    store.dispatch("userStore/setUser",response.data.body)
+                    store.dispatch("userStore/setUser", response.data.body)
                 }
             }).catch(() => {
         })
@@ -44,11 +44,17 @@ class UserApi {
             store.dispatch("userStore/dropUser")
         } else {
             let api = BaseApi.axiosInstance;
-            api.delete('/user/logout').then(() => {
-                jwtStorage.dropTokens()
-                store.dispatch("userStore/dropUser")
-                    .then(router.push('/'))
-            })
+            api.delete('/user/logout')
+                .then(() => {
+                    jwtStorage.dropTokens()
+                    store.dispatch("userStore/dropUser")
+                        .then(router.push('/'))
+                })
+                .catch(() => {
+                    jwtStorage.dropTokens()
+                    store.dispatch("userStore/dropUser")
+                        .then(router.push('/'))
+                })
         }
     }
 
