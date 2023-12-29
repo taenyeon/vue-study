@@ -16,7 +16,9 @@ export default {
           last: true,
           first: false,
           size: 0,
-        }
+        },
+        totalPages : 0,
+        number : 1
       }
     }
   },

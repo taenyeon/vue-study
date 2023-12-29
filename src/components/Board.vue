@@ -2,16 +2,33 @@
 export default {
   name: "BoardComponent",
   props: ['datas'],
+  data() {
+    return {
+      boardHeaders: ['id', 'title', 'writer', 'createdAt']
+    }
+  },
   computed: {
     boardData: function () {
       return this.datas
-    }
+    },
+    pageData() {
+      let pageable = this.boardData;
+      let maxPage = pageable.totalPages < pageable.number + 4
+          ? pageable.totalPages : pageable.number;
+      let pageNumber = pageable.number + 1
+      let pages = []
+      for (let i = pageNumber; i <= maxPage; i++) {
+        let pageInfo = {
+          pageNumber: i,
+          isCurrentNumber: pageNumber === i
+        }
+        pages.push(pageInfo)
+      }
+      return pages
+    },
   },
   methods: {
-    getPageList() {
-
-    },
-    getHeaders(){
+    getHeaders() {
       return Object.keys(this.boardData.content[0]);
     }
   }
@@ -23,16 +40,16 @@ export default {
 
     <table class="table table-dark table-hover">
       <thead class="align-middle">
-          <tr>
-            <th v-for="item in getHeaders()" :key="item">{{item}}</th>
-          </tr>
+      <tr>
+        <th v-for="item in boardHeaders" :key="item">{{ item }}</th>
+      </tr>
       </thead>
       <tbody class="align-middle">
       <tr v-for="item in boardData.content" :key="item.id">
-        <td>{{ item.id }}</td>
-        <td>{{ item.title }}</td>
-        <td>{{ item.member.name }}</td>
-        <td>{{ item.createdAt }}</td>
+        <td class="col-md-1">{{ item.id }}</td>
+        <td class="col-md-5">{{ item.title }}</td>
+        <td class="col-md-1">{{ item.member.name }}</td>
+        <td class="col-md-2">{{ item.createdAt }}</td>
       </tr>
       </tbody>
     </table>
@@ -41,9 +58,9 @@ export default {
         <li class="page-item disabled">
           <a class="page-link text-dark" href="#" tabindex="-1" aria-disabled="true">Prev</a>
         </li>
-        <li class="page-item"><p @click="$emit('movePage', 1)" class="page-link text-dark" href="#">1</p></li>
-        <li class="page-item"><p class="page-link text-dark" href="#">2</p></li>
-        <li class="page-item"><p class="page-link text-dark" href="#">3</p></li>
+        <li v-for="item in pageData" :key="item.pageNumber" @click="$emit('movePage', item.pageNumber-1)" class="page-item">
+          <a class="page-link text-dark" href="#">{{ item.pageNumber }}</a>
+        </li>
         <li class="page-item">
           <a class="page-link text-dark" href="#">Next</a>
         </li>
